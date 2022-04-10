@@ -18,7 +18,7 @@ window.onload = function() {
     ],
     layout: "StandaloneLayout",
     requestInterceptor: function(req) {
-      req.url = `https://api.allorigins.win/raw?url=${encodeURIComponent(req.url)}`
+      req.url = `http://alloworigin.com/get?url=${req.url/}`
       return req;
     }
   });
