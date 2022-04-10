@@ -18,7 +18,7 @@ window.onload = function() {
     ],
     layout: "StandaloneLayout",
     requestInterceptor: function(req) {
-      req.url = `https://cors-anywhere.herokuapp.com/${req.url/}`
+      req.url = `https://cors-anywhere.herokuapp.com/${req.url}`
       return req;
     }
   });
