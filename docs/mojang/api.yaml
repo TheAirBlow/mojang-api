@@ -16,6 +16,8 @@ tags:
   description: "User profiles"
 - name: "security"
   description: "Security questions"
+- name: "credit"
+  description: "Credit cards"
 paths:
   /orders/statistics:
     post:
@@ -534,8 +536,8 @@ paths:
                           description: The question itself (you do not have to use the enum)
                           type: string
               examples:
-                UnsupportedMediaType:
-                  summary: Your IP is not trusted
+                SecurityQuestions:
+                  summary: Security questions
                   value: |
                     [
                        {
@@ -566,6 +568,261 @@ paths:
                           }
                        }
                     ]
+        "401":
+          description: Invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorApi"
+              examples:
+                Unauthorized:
+                  summary: Invalid access token
+                  value:
+                    error: Unauthorized
+                    errorMessage: The request requires user authentication
+  /user:
+    get:
+      security:
+      - AccessToken: []
+      tags:
+      - "profiles"
+      summary: "Get your profile (to get more information, use Microsoft Services API)"
+      operationId: "getYourProfile"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    description: "Internal Mojang account identifier"
+                    type: string
+                  email:
+                    description: "Account's email"
+                    type: string
+                  username:
+                    description: "Username for legacy accounts, email for migrated"
+                    type: string
+                  dateOfBirth:
+                    description: "Date of birth, unix timestamp"
+                    type: integer
+                  secured:
+                    description: "Are security questions set"
+                    type: boolean
+                  emailVerified:
+                    description: "Was the email verified"
+                    type: boolean
+                  legacyUser:
+                    description: "Is this a legacy account"
+                    type: boolean
+                  verifiedByParent:
+                    description: "Is parental consent enabled"
+                    type: boolean
+                  hashed:
+                    description: "API no longer sends the hash instead of the email even if this is set"
+                    type: boolean
+              examples:
+                MigratedAccount:
+                  summary: Migrated account
+                  value: |
+                    {
+                      "id": "026cb82ad0c006a2d7e4fe9df19620ad",
+                      "email": "coolemail@domain.tld",
+                      "username": "coolemail@domain.tld",
+                      "dateOfBirth": 849624812000,
+                      "secured": true,
+                      "emailVerified": true,
+                      "legacyUser": false,
+                      "verifiedByParent": false,
+                      "hashed": false
+                    }
+                LegacyAccount:
+                  summary: Legacy account
+                  value: |
+                    {
+                      "id": "1253680",
+                      "email": "N/A",
+                      "username": "coolusername2",
+                      "secured": false,
+                      "emailVerified": true,
+                      "legacyUser": true,
+                      "verifiedByParent": false,
+                      "hashed": true
+                    }
+        "401":
+          description: Invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorApi"
+              examples:
+                Unauthorized:
+                  summary: Invalid access token
+                  value:
+                    error: UnauthorizedOperationException
+                    errorMessage: User not authenticated
+  /creditcards:
+    get:
+      security:
+      - AccessToken: []
+      tags:
+      - "credit"
+      summary: "Get your credit cards"
+      operationId: "getCreditCards"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      description: Credit Card ID
+                      type: string
+                    storedInVault:
+                      description: Is it stored
+                      type: boolean
+                    billingAddress:
+                      type: object
+                      properties:
+                        id:
+                          description: Unknown
+                          type: string
+                        userId:
+                          description: Internal Mojang user ID
+                          type: string
+                        countryCode:
+                          description: Country Code
+                          type: string
+                        postalCode:
+                          description: Postal code
+                          type: string
+                        creditCardId:
+                          description: Unknown
+                          type: string
+                        newAddress:
+                          description: Is this a new address
+                          type: boolean
+                    userId:
+                      description: Internal Mojang user ID
+                      type: string
+                    last4:
+                      description: Last four digits of the card number
+                      type: string
+                    cardType:
+                      description: Card's type
+                      type: string
+                      enum: [ Visa, MasterCard, etc. ]
+                    provider:
+                      description: Provider
+                      type: string
+                      enum: [ braintree, moneybookers, ayden, skrill, dibs, paypal ]
+                    paymentInfo:
+                      description: Redacted card number
+                      type: string
+                    createdAt:
+                      description: When was the credit card added, unix timestamp
+                      type: integer
+                    storedInVaultAt:
+                      description: When the credit card info was stored, unix timestamp
+                      type: integer
+                    newCreditCard:
+                      description: Is this a new credit card
+                      type: boolean
+              examples:
+                Example:
+                  summary: Example
+                  value: |
+                    [
+                      {
+                        "id": "a85887bf0ffd80d5a6addd6ff5aa278a",
+                        "storedInVault": true,
+                        "billingAddress": {
+                          "id": "30459174",
+                          "userId": "88a4eeb5bd5a4640aa3865878aec6d6b",
+                          "countryCode": "US",
+                          "postalCode": "95014",
+                          "creditCardId": "145447b03f0d43c5a6accd60f5aa2741",
+                          "newAddress": false
+                        },
+                        "userId": "88a4eeb5bd5a4640aa3865878aec6d6b",
+                        "last4": "4272",
+                        "cardType": "Visa",
+                        "provider": "braintree",
+                        "paymentInfo": "434283**4272",
+                        "createdAt": 1597463065000,
+                        "storedInVaultAt": 1597463067000,
+                        "newCreditCard": false
+                      }
+                    ]
+        "401":
+          description: Invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorApi"
+              examples:
+                Unauthorized:
+                  summary: Invalid access token
+                  value:
+                    error: UnauthorizedOperationException
+                    errorMessage: User not authenticated
+  /users/password:
+    put:
+      security:
+      - AccessToken: []
+      tags:
+      - "profiles"
+      summary: "Set account's password (Mojang only)"
+      operationId: "setPassword"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword:
+                  description: Old password
+                  type: string
+                password:
+                  description: New password
+                  type: string
+            example: |
+              {
+                "oldPassword" : "password12345",
+                "password" : "6ipo8Y%GMxM544V%$h*&M*#%7!D*897%"
+              }
+      responses:
+        "204":
+          description: Successfully changed the password
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorApi"
+              examples:
+                UnsequreRequest:
+                  summary: "Insequre request (unknown)"
+                  value:
+                    error: IllegalArgumentException
+                    errorMessage: Unsecure request
+                OldPasswordInvalid:
+                  summary: "Old password is invalid"
+                  value:
+                    error: IllegalArgumentException
+                    errorMessage: Old password invalid.
+                InvalidJson:
+                  summary: "Invalid JSON"
+                  value:
+                    error: JsonMappingException
+                    errorMessage: JSON exception message would be here
         "401":
           description: Invalid access token
           content:
