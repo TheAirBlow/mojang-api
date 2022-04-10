@@ -20,6 +20,7 @@ window.onload = function() {
     layout: "StandaloneLayout",
     requestInterceptor: function() {
       this.url = proxy + this.url
+      console.log(this.url)
       return this;
     }
   });
