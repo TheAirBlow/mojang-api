@@ -1,1 +1,11 @@
-# authserver.mojang.com
+openapi: 3.0.0
+servers:
+  - description: Yggdrasil Mojang Server
+    url: https://authserver.mojang.com
+info:
+  version: "1.0.0"
+  description: Mojang's Yggdrasil Server API
+  title: "Yggdrasil Mojang Server"
+  termsOfService: "https://www.minecraft.net/en-us/terms"
+  contact:
+    email: "theairblow.help@gmail.com"

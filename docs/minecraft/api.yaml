@@ -1,1 +1,11 @@
-# api.minecraftservices.com
+openapi: 3.0.0
+servers:
+  - description: Minecraft Services API
+    url: https://api.minecraftservices.com
+info:
+  version: "1.0.0"
+  description: New public Minecraft API
+  title: "Minecraft Services API"
+  termsOfService: "https://www.minecraft.net/en-us/terms"
+  contact:
+    email: "theairblow.help@gmail.com"
