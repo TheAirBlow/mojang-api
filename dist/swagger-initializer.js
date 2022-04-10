@@ -1,5 +1,4 @@
 window.onload = function() {
-  let proxy = "https://thingproxy.freeboard.io/fetch/"
   window.ui = SwaggerUIBundle({
     urls: [
       {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/api.yaml", "name": "Public Mojang API"},
@@ -18,15 +17,9 @@ window.onload = function() {
       SwaggerUIBundle.plugins.DownloadUrl
     ],
     layout: "StandaloneLayout",
-    requestInterceptor: function() {
-      if (this.url === undefined)
-        return this;
-      console.log("Full object:")
-      console.log(this)
-      console.log(`Original URL: ${this.url}`)
-      this.url = `https://api.allorigins.win/raw?url=${encodeURIComponent(this.url)}`
-      console.log(`New URL: ${this.url}`)
-      return this;
+    requestInterceptor: function(req) {
+      req.url = `https://api.allorigins.win/raw?url=${encodeURIComponent(req.url)}`
+      return req;
     }
   });
 };
