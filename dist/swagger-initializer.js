@@ -19,7 +19,7 @@ window.onload = function() {
     ],
     layout: "StandaloneLayout",
     requestInterceptor: function() {
-      this.url = `https://api.allorigins.win/get?url=${encodeURIComponent(this.url)}`
+      this.url = `https://api.allorigins.win/raw?url=${encodeURIComponent(this.url)}`
       console.log(this.url)
       return this;
     }
