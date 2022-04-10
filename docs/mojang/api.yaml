@@ -6,7 +6,7 @@ info:
   version: "1.0.0"
   description: \"Try it out" does not work because of CORS preflight
   title: "Public Mojang API"
-  termsOfService: "https://www.minecraft.net/ru-ru/terms"
+  termsOfService: "https://www.minecraft.net/en-us/terms"
   contact:
     email: "theairblow.help@gmail.com"
 tags:
