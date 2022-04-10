@@ -25,6 +25,7 @@ paths:
       tags:
       - "orders"
       summary: "Get sale statistics"
+      description: This service was closed down by Mojang on 8 March 2022 because it didn't represent the total sales of Minecraft. The counter stopped at 45.6M Minecraft Java and 305k Minecraft Dungeons sales. Ined posted a statement on [Twitter](https://twitter.com/Mojang_Ined/status/1501541417784852484).
       operationId: "getStatistics"
       requestBody:
         required: true
