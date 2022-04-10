@@ -1,5 +1,5 @@
 window.onload = function() {
-  let proxy = "https://cors-proxy.htmldriven.com/?url="
+  let proxy = "https://thingproxy.freeboard.io/fetch/"
   window.ui = SwaggerUIBundle({
     urls: [
       {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/api.yaml", "name": "Public Mojang API"},
