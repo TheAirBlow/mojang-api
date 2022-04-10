@@ -1,7 +1,5 @@
 window.onload = function() {
-  //<editor-fold desc="Changeable Configuration Block">
-
-  // the following lines will be replaced by docker/configurator, when it runs in a docker-container
+  let proxy = "https://cors-proxy.htmldriven.com/?url="
   window.ui = SwaggerUIBundle({
     urls: [
       {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/api.yaml", "name": "Public Mojang API"},
@@ -19,8 +17,10 @@ window.onload = function() {
     plugins: [
       SwaggerUIBundle.plugins.DownloadUrl
     ],
-    layout: "StandaloneLayout"
+    layout: "StandaloneLayout",
+    requestInterceptor: function() {
+      this.url = proxy + '/' + this.url
+      return this;
+    }
   });
-
-  //</editor-fold>
 };
