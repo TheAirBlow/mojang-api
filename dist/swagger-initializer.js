@@ -19,6 +19,8 @@ window.onload = function() {
     ],
     layout: "StandaloneLayout",
     requestInterceptor: function() {
+      console.log("Full object:")
+      console.log(this)
       console.log(`Original URL: ${this.url}`)
       this.url = `https://api.allorigins.win/raw?url=${encodeURIComponent(this.url)}`
       console.log(`New URL: ${this.url}`)
