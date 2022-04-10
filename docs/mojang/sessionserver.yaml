@@ -4,7 +4,7 @@ servers:
     url: https://sessionserver.mojang.com/
 info:
   version: "1.0.0"
-  description: \"Try it out" does not work because of CORS preflight
+  description: Mojang's official session server API
   title: "Mojang Session API"
   termsOfService: "https://www.minecraft.net/en-us/terms"
   contact:
