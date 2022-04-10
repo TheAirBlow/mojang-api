@@ -18,6 +18,8 @@ window.onload = function() {
     ],
     layout: "StandaloneLayout",
     requestInterceptor: function(req) {
+      if (req.url.startsWith("https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/"))
+        return req;
       req.url = `https://cors-anywhere.herokuapp.com/${req.url}`
       return req;
     }
