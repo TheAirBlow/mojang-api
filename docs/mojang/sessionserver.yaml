@@ -113,7 +113,7 @@ paths:
         "200":
           description: OK
           content:
-            text/plain:
+            */*:
               examples:
                 Example:
                   value: |
