@@ -13,7 +13,8 @@ window.onload = function() {
       SwaggerUIStandalonePreset
     ],
     plugins: [
-      SwaggerUIBundle.plugins.DownloadUrl
+      SwaggerUIBundle.plugins.DownloadUrl,
+      SwaggerUIBundle.plugins.Topbar
     ],
     layout: "StandaloneLayout",
     requestInterceptor: function(req) {
