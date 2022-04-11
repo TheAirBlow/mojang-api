@@ -1,10 +1,10 @@
 window.onload = function() {
   window.ui = SwaggerUIBundle({
     urls: [
-      {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/api.yaml", "name": "Public Mojang API"},
-      {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/sessionserver.yaml", "name": "Mojang Session API"},
-      {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/authserver.yaml", "name": "Yggdrasil Mojang Server"},
-      {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/minecraft/api.yaml", "name": "Minecraft Services API"}
+      {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/api.yaml", "name": "api.mojang.com"},
+      {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/sessionserver.yaml", "name": "sessionserver.mojang.com"},
+      {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/authserver.yaml", "name": "authserver.mojang.com"},
+      {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/minecraft/api.yaml", "name": "api.minecraftservices.com"}
     ],
     dom_id: '#swagger-ui',
     deepLinking: true,

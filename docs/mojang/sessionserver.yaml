@@ -1,7 +1,7 @@
 openapi: 3.0.0
 servers:
   - description: Mojang Session API
-    url: https://sessionserver.mojang.com/
+    url: https://sessionserver.mojang.com
 info:
   version: "1.0.0"
   description: Mojang's official session server API

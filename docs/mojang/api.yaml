@@ -1,7 +1,7 @@
 openapi: 3.0.0
 servers:
   - description: Public Mojang API
-    url: https://api.mojang.com/
+    url: https://api.mojang.com
 info:
   version: "1.0.0"
   description: Mojang's official public API
