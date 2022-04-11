@@ -6,6 +6,7 @@ window.onload = function() {
       {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/authserver.yaml", "name": "authserver.mojang.com"},
       {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/minecraft/api.yaml", "name": "api.minecraftservices.com"}
     ],
+    queryConfigEnabled: true,
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [
