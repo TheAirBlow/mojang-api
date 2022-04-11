@@ -19,7 +19,7 @@ window.onload = function() {
     requestInterceptor: function(req) {
       if (req.url.startsWith("https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/"))
         return req;
-      req.url = `https://cors-anywhere.herokuapp.com/${req.url}`
+      req.url = `https://corsproxy.vercel.app/${req.url}`
       return req;
     }
   });
