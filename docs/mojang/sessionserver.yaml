@@ -19,6 +19,13 @@ paths:
       - "all"
       summary: "Get user's profile by UUID"
       operationId: "getProfileByUuid"
+      description: |
+        * The timestamp is sometimes in the past (probably due to cached results?)
+        * If no custom skin has been set, "SKIN" will be missing.
+        * Likewise "CAPE" will be missing if the account has no cape.
+        * Whether the player has the “Alex?” or “Steve?” skin depends on [the Java hashCode](http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/src/share/classes/java/util/UUID.java#l394) of their UUID. Steve is used for even hashes. Example implementations:
+        [JavaScript (includes explanation)](https://github.com/crafatar/crafatar/blob/9d2fe0c45424de3ebc8e0b10f9446e7d5c3738b2/lib/skins.js#L90-L108)
+        [Java (includes sample UUIDs)](https://web.archive.org/web/20151022205119/https://gist.github.com/jomo/9968b8d572c38e1b1f4c)
       parameters:
       - in: path
         name: uuid
@@ -67,7 +74,7 @@ paths:
                           description: Base64 encoded signature of value
                           type: string
                   legacy:
-                    description: Is this account legacy
+                    description: Present if the account is legacy
                     type: boolean
               examples:
                 Example:
@@ -147,6 +154,9 @@ components:
         profileName:
           description: Username
           type: string
+        signatureRequired:
+          description: "Present if the unsigned query parameter is false"
+          type: boolean
         textures:
           description: Textures themselves
           type: object
