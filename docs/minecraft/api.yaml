@@ -9,3 +9,356 @@ info:
   termsOfService: "https://www.minecraft.net/en-us/terms"
   contact:
     email: "theairblow.help@gmail.com"
+tags:
+- name: "other"
+  description: "Uncategorised"
+- name: "profiles"
+  description: "User profiles"
+- name: "username"
+  description: "Security questions"
+- name: "migration"
+  description: "Mojang to Microsoft migration"
+paths:
+  /productvoucher/{voucher}:
+    put:
+      tags:
+      - other
+      security:
+      - AccessToken: []
+      summary: Redeem a giftcode/voucher
+      parameters:
+      - in: path
+        name: voucher
+        required: true
+        description: Voucher code
+        schema:
+          type: string
+        example: 78147-84875-19894-06498-47897
+      responses:
+        "200":
+          description: Successfully redeemed a voucher
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  voucherInfo:
+                    type: object
+                    properties:
+                      code:
+                        description: The gift code itself
+                        type: string
+                      productVariant:
+                        description: Game
+                        type: string
+                        enum: [ minecraft, dungeons ]
+                      status:
+                        description: Status
+                        type: string
+                        enum: [ ACTIVE ]
+                  productRedeemable:
+                    description: Are you allowed to redeem this voucher
+                    type: boolean
+              examples:
+                Success:
+                  summary: Success
+                  value: |
+                    {
+                      "voucherInfo" : {
+                        "code" : "78147-84875-19894-06498-47897",
+                        "productVariant" : "minecraft",
+                        "status" : "ACTIVE"
+                      },
+                      "productRedeemable" : true 
+                    }
+        "401":
+          description: Invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorApi"
+              examples:
+                InvalidAccessToken:
+                  summary: Invalid access token
+                  value: |
+                    {
+                      "path" : "/productvoucher/:voucher",
+                      "errorType" : "UnauthorizedOperationException",
+                      "error" : "UnauthorizedOperationException",
+                      "errorMessage" : "Unauthorized",
+                      "developerMessage" : "Unauthorized"
+                    }
+        "404":
+          description: Invalid or used vouhcer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorApi"
+              examples:
+                InvalidVoucher:
+                  summary: Invalid voucher
+                  value: |
+                    {
+                      "path":"/productvoucher/:voucher",
+                      "errorType":"NOT_FOUND",
+                      "error":"NOT_FOUND"
+                    }
+                UsedVoucher:
+                  summary: Used voucher
+                  value: |
+                    {
+                      "path" : "/productvoucher/:voucher",
+                      "errorType" : "NOT_FOUND",
+                      "error" : "NOT_FOUND",
+                      "errorMessage" : "The server has not found anything matching the request URI",
+                      "developerMessage" : "The server has not found anything matching the request URI"
+                    }
+        "500":
+          description: You didn't migrate to Microsoft
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorApi"
+              examples:
+                NotMigrated:
+                  summary: Not migrated
+                  value: |
+                    {
+                      "path" : "/productvoucher/:voucher",
+                      "errorType" : "No value present",
+                      "error" : "No value present"
+                    }
+  /entitlements/mcstore:
+    get:
+      tags:
+      - other
+      security:
+      - AccessToken: []
+      summary: Get purchased items
+      description: |
+        Note: this is to check **ownership** of the game, but Xbox Game Pass
+        would not actually make you an owner of the game - instead you "rent" it.
+        
+        Use the `/minecraft/profile` endpoint instead as a 100% method
+        to check if the user bought the game or has Xbox Game Pass.
+        
+        Decoded `game_minecraft` and `product_minecraft` JWTs:
+        ```json
+        {
+          "signerId": "2575459622728545",
+          "name": "game_minecraft"
+        }
+        ```
+        
+        Decoded signature JWT:
+        ```
+        {
+          "entitlements": [
+            {
+              "name": "product_minecraft"
+            },
+            {
+              "name": "game_minecraft"
+            }
+          ],
+          "signerId": "2575459622728545",
+          "nbf": 1624461990,
+          "exp": 1624634970,
+          "iat": 1624462170
+        }
+        ```
+        
+        Note that the signature should always be checked with the public key from Mojang
+        to verify that it is a legitimate response from the official servers:
+
+        ```
+        -----BEGIN PUBLIC KEY-----
+        MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAtz7jy4jRH3psj5AbVS6W
+        NHjniqlr/f5JDly2M8OKGK81nPEq765tJuSILOWrC3KQRvHJIhf84+ekMGH7iGlO
+        4DPGDVb6hBGoMMBhCq2jkBjuJ7fVi3oOxy5EsA/IQqa69e55ugM+GJKUndLyHeNn
+        X6RzRzDT4tX/i68WJikwL8rR8Jq49aVJlIEFT6F+1rDQdU2qcpfT04CBYLM5gMxE
+        fWRl6u1PNQixz8vSOv8pA6hB2DU8Y08VvbK7X2ls+BiS3wqqj3nyVWqoxrwVKiXR
+        kIqIyIAedYDFSaIq5vbmnVtIonWQPeug4/0spLQoWnTUpXRZe2/+uAKN1RY9mmaB
+        pRFV/Osz3PDOoICGb5AZ0asLFf/qEvGJ+di6Ltt8/aaoBuVw+7fnTw2BhkhSq1S/
+        va6LxHZGXE9wsLj4CN8mZXHfwVD9QG0VNQTUgEGZ4ngf7+0u30p7mPt5sYy3H+Fm
+        sWXqFZn55pecmrgNLqtETPWMNpWc2fJu/qqnxE9o2tBGy/MqJiw3iLYxf7U+4le4
+        jM49AUKrO16bD1rdFwyVuNaTefObKjEMTX9gyVUF6o7oDEItp5NHxFm3CqnQRmch
+        HsMs+NxEnN4E9a8PDB23b4yjKOQ9VHDxBxuaZJU60GBCIOF9tslb7OAkheSJx5Xy
+        EYblHbogFGPRFU++NrSQRX0CAwEAAQ==
+        -----END PUBLIC KEY-----
+        ```
+        
+        In case the public key ever changes, it can be extracted from the launcher library:
+        ```
+        strings ~/.minecraft/launcher/liblauncher.so > launcher-strings.txt
+        ```
+        The created file `launcher-strings.txt` will include two keys. The first key 
+        seems to be the one used for the JWT tokens, use of the second key is unknown. 
+      responses:
+        "200":
+          description: Successfully redeemed a voucher
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  voucherInfo:
+                    type: object
+                    properties:
+                      code:
+                        description: The gift code itself
+                        type: string
+                      productVariant:
+                        description: Game
+                        type: string
+                        enum: [ minecraft, dungeons ]
+                      status:
+                        description: Status
+                        type: string
+                        enum: [ ACTIVE ]
+                  productRedeemable:
+                    description: Are you allowed to redeem this voucher
+                    type: boolean
+              examples:
+                Success:
+                  summary: Success
+                  value: |
+                    {
+                      "voucherInfo" : {
+                        "code" : "78147-84875-19894-06498-47897",
+                        "productVariant" : "minecraft",
+                        "status" : "ACTIVE"
+                      },
+                      "productRedeemable" : true 
+                    }
+        "401":
+          description: Invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorApi"
+              examples:
+                InvalidAccessToken:
+                  summary: Invalid access token
+                  value: |
+                    {
+                      "path" : "/productvoucher/:voucher",
+                      "errorType" : "UnauthorizedOperationException",
+                      "error" : "UnauthorizedOperationException",
+                      "errorMessage" : "Unauthorized",
+                      "developerMessage" : "Unauthorized"
+                    }
+        "404":
+          description: Invalid or used vouhcer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorApi"
+              examples:
+                InvalidVoucher:
+                  summary: Invalid voucher
+                  value: |
+                    {
+                      "path":"/productvoucher/:voucher",
+                      "errorType":"NOT_FOUND",
+                      "error":"NOT_FOUND"
+                    }
+                UsedVoucher:
+                  summary: Used voucher
+                  value: |
+                    {
+                      "path" : "/productvoucher/:voucher",
+                      "errorType" : "NOT_FOUND",
+                      "error" : "NOT_FOUND",
+                      "errorMessage" : "The server has not found anything matching the request URI",
+                      "developerMessage" : "The server has not found anything matching the request URI"
+                    }
+        "500":
+          description: You didn't migrate to Microsoft
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorApi"
+              examples:
+                NotMigrated:
+                  summary: Not migrated
+                  value: |
+                    {
+                      "path" : "/productvoucher/:voucher",
+                      "errorType" : "No value present",
+                      "error" : "No value present"
+                    }
+  /player/attributes:
+    get:
+      tags:
+      - other
+      security:
+      - AccessToken: []
+      summary: User's attributes
+      description: |
+        This API endpoint fetches information about the player accounts privacy and child 
+        safety settings. Exactly which toggle flips which boolean here is not known. 
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              examples:
+                OK:
+                  summary: OK
+                  value: |
+                    {
+                      "privileges": {
+                        "onlineChat": {
+                          "enabled": true
+                        },
+                        "multiplayerServer": {
+                          "enabled": true
+                        },
+                        "multiplayerRealms": {
+                          "enabled": true
+                        },
+                        "telemetry": {
+                          "enabled": true
+                        }
+                      },
+                      "profanityFilterPreferences": {
+                        "profanityFilterOn": false
+                      }
+                    }
+        "401":
+          description: Invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorApi"
+              examples:
+                InvalidAccessToken:
+                  summary: Invalid access token
+                  value: |
+                    {
+                      "path" : "/productvoucher/:voucher",
+                      "errorType" : "UnauthorizedOperationException",
+                      "error" : "UnauthorizedOperationException",
+                      "errorMessage" : "Unauthorized",
+                      "developerMessage" : "Unauthorized"
+                    }
+components:
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer
+  schemas:
+    ErrorApi:
+      type: object
+      properties:
+        path:
+          type: string
+        errorType:
+          type: string
+        error:
+          type: string
+        errorMessage:
+          type: string
+        developerMessage:
+          type: string
