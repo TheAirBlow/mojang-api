@@ -108,6 +108,12 @@ paths:
                     name:
                       description: Username
                       type: string
+                    legacy:
+                      description: Is present if the account is legacy
+                      type: boolean
+                    demo:
+                      description: Is Present if the account is demo (unpaid)
+                      type: boolean
               examples:
                 Example:
                   summary: "Example"
