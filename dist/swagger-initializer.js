@@ -1,12 +1,9 @@
 window.onload = function() {
+  //<editor-fold desc="Changeable Configuration Block">
+
+  // the following lines will be replaced by docker/configurator, when it runs in a docker-container
   window.ui = SwaggerUIBundle({
-    urls: [
-      {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/api.yaml", "name": "api.mojang.com"},
-      {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/sessionserver.yaml", "name": "sessionserver.mojang.com"},
-      {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/mojang/authserver.yaml", "name": "authserver.mojang.com"},
-      {"url": "https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/minecraft/api.yaml", "name": "api.minecraftservices.com"}
-    ],
-    queryConfigEnabled: true,
+    url: "https://petstore.swagger.io/v2/swagger.json",
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [
@@ -14,15 +11,10 @@ window.onload = function() {
       SwaggerUIStandalonePreset
     ],
     plugins: [
-      SwaggerUIBundle.plugins.DownloadUrl,
-      SwaggerUIBundle.plugins.Topbar
+      SwaggerUIBundle.plugins.DownloadUrl
     ],
-    layout: "StandaloneLayout",
-    requestInterceptor: function(req) {
-      if (req.url.startsWith("https://raw.githubusercontent.com/TheAirBlow/mojang-api/master/docs/"))
-        return req;
-      req.url = `https://mojangcors.herokuapp.com/${req.url}`
-      return req;
-    }
+    layout: "StandaloneLayout"
   });
+
+  //</editor-fold>
 };
